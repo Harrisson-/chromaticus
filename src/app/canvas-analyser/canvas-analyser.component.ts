@@ -32,13 +32,33 @@ export class CanvasAnalyserComponent {
 
         const paletteDom = document.getElementById('palette') as HTMLElement;
         
-        let palette = majorColors(hslArray);
-        palette = sortColorSetHue(palette);
+        //let palette = majorColors(hslArray);
+        // let palette = sortColorSetHue(hslArray);
 
-        palette.forEach(color => {
-          createNewSpanColor(paletteDom, color);
-        });
-        console.log('hslArray Set', palette);
+        const centroids = initCentroids(hslArray, 5);
+        let centroidMap = fillCentroidsDataset(hslArray, centroids);
+        let newCentroid = new Map<string, Array<number[]>>();
+        while (true) {
+          newCentroid = updateCentroids(centroidMap);
+          console.log("centroidKeys", [...centroidMap.keys()])
+          console.log("newCentroidKeys", [...newCentroid.keys()])
+          if (!isSameCentroids(centroidMap, newCentroid)) {
+            centroidMap = fillCentroidsDataset(hslArray, [...newCentroid.keys()]);
+          } else {
+            break;
+          }
+        }
+        for (const [colorkey, colorSet] of newCentroid) {
+          const totalS = colorSet.reduce((partialSum, a) => {
+            return partialSum + a[1];
+          }, 0) / colorSet.length;
+          const totalL = colorSet.reduce((partialSum, a) => partialSum + a[2], 0) / colorSet.length;
+          const totalA = colorSet.reduce((partialSum, a) => partialSum + a[3], 0) / colorSet.length;
+          const newColor = `${colorkey.split(',')[0]}, ${totalS}%, ${totalL}%, ${totalA}`;
+          createNewSpanColor(paletteDom, newColor);
+          console.log('newColor', newColor);
+        }
+        console.log('hslArray Set', hslArray);
         // console.log("new list", newList);
         
       }
@@ -47,43 +67,61 @@ export class CanvasAnalyserComponent {
   }
 }
 
-function initCentroids(dataset: Set<String>, k: number) {
+function initCentroids(dataset: Array<number[]>, k: number): Array<string> {
   const colorArray = [...dataset];
   const centroidIndexes = [];
   let index;
   while (centroidIndexes.length < k) {
     index = colorArray[Math.floor(Math.random() * (colorArray.length - 0) + 0)];
-    centroidIndexes.push(index);
+    centroidIndexes.push(index.toString());
   }
+  return centroidIndexes;
 }
 
-function fillCentroidsDataset(dataset: Set<string>, centroidsIndexes: Array<string>): Map<string, Array<string>> {
+function fillCentroidsDataset(dataset: Array<number[]>, centroidsIndexes: Array<string>): Map<string, Array<number[]>> {
   var centroidMap = new Map();       
-  for(var i = 0; i < centroidsIndexes.length; i++){ 
-    centroidMap.set(centroidsIndexes[i], []); 
+  for(var [key, _value] of centroidsIndexes){ 
+    centroidMap.set(key.toString(), []); 
   } 
 
-  dataset.forEach((color: string) => {
-    const rayon = +color.split(',')[0];
-    const nearest = centroidsIndexes.reduce((a: string, b: string) => {
-      return Math.abs(+b.split(',')[0] - rayon) < Math.abs(+a.split(',')[0] - rayon) ? b : a;
-    })
-    centroidMap.get(nearest).push(color);
+  dataset.forEach((color: number[]) => {
+    const rayon = color[0];
+    if (centroidsIndexes.length > 0) {
+      const nearest = [...centroidsIndexes.values()].reduce((a, b) => {
+        return Math.abs(+b.split(',')[0] - rayon) < Math.abs(+a.split(',')[0] - rayon) ? b : a;
+      }) // A REVOIR
+      centroidMap.get(nearest).push(color);
+    }
   });
   return centroidMap;
 }
 
-function updateCentroids(centroidMap: Map<string, Array<string>>) {
+function updateCentroids(centroidMap: Map<string, Array<number[]>>):Map<string, Array<number[]>>  {
   var newCentroidMap = new Map();
-  centroidMap.forEach((value, _key) => {
-    const totalHue = value.reduce((partialSum, a) => partialSum + +a.split(',')[0], 0) / value.length;
-    const totalS = value.reduce((partialSum, a) => partialSum + +a.split(',')[1], 0) / value.length;
-    const totalL = value.reduce((partialSum, a) => partialSum + +a.split(',')[2], 0) / value.length;
-    const totalA = value.reduce((partialSum, a) => partialSum + +a.split(',')[3], 0) / value.length;
-
-    const newCentroid = `${totalHue}, ${totalS}%, ${totalL}%, ${totalA}`;
-    newCentroidMap.set(newCentroid, []); 
+  centroidMap.forEach((value, key) => {
+    const totalHue = value.reduce((partialSum, a) => partialSum + +a[0], 0) / value.length;
+    const newCentroid = `${totalHue}, 50%, 50%, 1`;
+    if (roundToZero(+key.split(',')[0]) !== roundToZero(totalHue)) {
+      newCentroidMap.set(newCentroid, []);
+    } else {
+      newCentroidMap.set(newCentroid, value);
+    }
   });
+  return newCentroidMap; 
+}
+
+function isSameCentroids(centroids: Map<string, Array<number[]>>, newCentroids: Map<string, Array<number[]>>) {
+  const centroidKeys = [...centroids.keys()];
+  const newCentroiKeys = [...newCentroids.keys()];
+  if (newCentroiKeys.length !== centroidKeys.length) {
+    return false;
+  }
+  for (let index = 0; index < newCentroiKeys.length; index++) {
+    if (roundToZero(+centroidKeys[index].split(',')[0]) !== roundToZero(+newCentroiKeys[index].split(',')[0])) {
+      return false;
+    }
+  }
+  return true;
 }
 
 function createNewSpanColor(parentDom: HTMLElement, color: string) {
@@ -95,10 +133,10 @@ function createNewSpanColor(parentDom: HTMLElement, color: string) {
   parentDom.appendChild(newDiv);
 }
 
-function sortColorSetHue(colorPalette: Set<string>): Set<string> {
-  const tmp = [...colorPalette].sort((a, b) => +a.split(',')[0] - +b.split(',')[0]);
-  return new Set(tmp);
-}
+// function sortColorSetHue(colorPalette: Array<number>): Array<number> {
+//   const tmp = colorPalette.sort();//(a, b) => a[0] - b[0]);
+//   return tmp;
+// }
 
 function majorColors(hslArray: Array<(number)[]>): Set<string> {
   const colorSet: Set<string> = new Set();
