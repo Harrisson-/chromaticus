@@ -40,8 +40,6 @@ export class CanvasAnalyserComponent {
         let newCentroid = new Map<string, Array<number[]>>();
         while (true) {
           newCentroid = updateCentroids(centroidMap);
-          console.log("centroidKeys", [...centroidMap.keys()])
-          console.log("newCentroidKeys", [...newCentroid.keys()])
           if (!isSameCentroids(centroidMap, newCentroid)) {
             centroidMap = fillCentroidsDataset(hslArray, [...newCentroid.keys()]);
           } else {
@@ -56,11 +54,7 @@ export class CanvasAnalyserComponent {
           const totalA = colorSet.reduce((partialSum, a) => partialSum + a[3], 0) / colorSet.length;
           const newColor = `${colorkey.split(',')[0]}, ${totalS}%, ${totalL}%, ${totalA}`;
           createNewSpanColor(paletteDom, newColor);
-          console.log('newColor', newColor);
         }
-        console.log('hslArray Set', hslArray);
-        // console.log("new list", newList);
-        
       }
     }
     img.src = "./assets/vaporeon.png";
@@ -79,10 +73,8 @@ function initCentroids(dataset: Array<number[]>, k: number): Array<string> {
 }
 
 function fillCentroidsDataset(dataset: Array<number[]>, centroidsIndexes: Array<string>): Map<string, Array<number[]>> {
-  var centroidMap = new Map();       
-  for(var [key, _value] of centroidsIndexes){ 
-    centroidMap.set(key.toString(), []); 
-  } 
+  var centroidMap = new Map();
+  centroidsIndexes.forEach(centroid => centroidMap.set(centroid.toString(), []));      
 
   dataset.forEach((color: number[]) => {
     const rayon = color[0];
