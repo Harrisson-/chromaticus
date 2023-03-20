@@ -7,7 +7,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None
 })
 export class CanvasAnalyserComponent {
-  CANVAS_SIZE = 500;
+  private CANVAS_SIZE = 500;
+  public globalColors: string[] = [];
 
   constructor() {
 
@@ -19,7 +20,7 @@ export class CanvasAnalyserComponent {
 
     let img = new Image();
     const size = this.CANVAS_SIZE;
-    img.onload = function() {
+    img.onload = () => {
       if (context) {
         const ratio = img.width / img.height;
         canvas.width = size;
@@ -30,7 +31,7 @@ export class CanvasAnalyserComponent {
         const datas = context.getImageData(0, 0, canvas.width, canvas.height);
         const hslArray = fromImageDataToColorArray(datas.data, rgbToHsl2);//rgbToHsl);
 
-        const paletteDom = document.getElementById('palette') as HTMLElement;
+        // const paletteDom = document.getElementById('palette') as HTMLElement;
         
         //let palette = majorColors(hslArray);
         // let palette = sortColorSetHue(hslArray);
@@ -53,7 +54,9 @@ export class CanvasAnalyserComponent {
           const totalL = colorSet.reduce((partialSum, a) => partialSum + a[2], 0) / colorSet.length;
           const totalA = colorSet.reduce((partialSum, a) => partialSum + a[3], 0) / colorSet.length;
           const newColor = `${colorkey.split(',')[0]}, ${totalS}%, ${totalL}%, ${totalA}`;
-          createNewSpanColor(paletteDom, newColor);
+
+          this.globalColors.push(newColor);
+          // createNewSpanColor(paletteDom, newColor);
         }
       }
     }
@@ -116,14 +119,14 @@ function isSameCentroids(centroids: Map<string, Array<number[]>>, newCentroids: 
   return true;
 }
 
-function createNewSpanColor(parentDom: HTMLElement, color: string) {
-  const newDiv = document.createElement("span");
-  newDiv.style.width = 20 + "px";
-  newDiv.style.height = 20 + "px";
-  newDiv.style.background = `hsla(${color})`;
-  newDiv.classList.add("color-analyser");
-  parentDom.appendChild(newDiv);
-}
+// function createNewSpanColor(parentDom: HTMLElement, color: string) {
+//   const newDiv = document.createElement("span");
+//   newDiv.style.width = 20 + "px";
+//   newDiv.style.height = 20 + "px";
+//   newDiv.style.background = `hsla(${color})`;
+//   newDiv.classList.add("color-analyser");
+//   parentDom.appendChild(newDiv);
+// }
 
 // function sortColorSetHue(colorPalette: Array<number>): Array<number> {
 //   const tmp = colorPalette.sort();//(a, b) => a[0] - b[0]);
