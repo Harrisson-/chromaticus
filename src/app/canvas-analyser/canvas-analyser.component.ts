@@ -7,12 +7,13 @@ import { Component, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None
 })
 export class CanvasAnalyserComponent {
+  private colorDegree: Array<number> = []; 
   private CANVAS_SIZE = 500;
+  private centroidNumber: number = 8;
+  private quantity: boolean = false;
+  
   public globalColors: string[] = [];
-
-  constructor() {
-
-  };
+  constructor() {};
 
   ngOnInit() {
     const canvas = document.getElementById('viewport') as HTMLCanvasElement;
@@ -29,14 +30,12 @@ export class CanvasAnalyserComponent {
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
         
         const datas = context.getImageData(0, 0, canvas.width, canvas.height);
-        const hslArray = fromImageDataToColorArray(datas.data, rgbToHsl2);//rgbToHsl);
-
-        // const paletteDom = document.getElementById('palette') as HTMLElement;
+        let hslArray = fromImageDataToColorArray(datas.data, rgbToHsl2);//rgbToHsl);
+        if (!this.quantity) {
+          hslArray = cleanColorArrayDuplicates(hslArray);
+        }
         
-        //let palette = majorColors(hslArray);
-        // let palette = sortColorSetHue(hslArray);
-
-        const centroids = initCentroids(hslArray, 5);
+        const centroids = initCentroids(hslArray, this.centroidNumber);
         let centroidMap = fillCentroidsDataset(hslArray, centroids);
         let newCentroid = new Map<string, Array<number[]>>();
         while (true) {
@@ -47,6 +46,7 @@ export class CanvasAnalyserComponent {
             break;
           }
         }
+        console.log("prout", newCentroid);
         for (const [colorkey, colorSet] of newCentroid) {
           const totalS = colorSet.reduce((partialSum, a) => {
             return partialSum + a[1];
@@ -56,7 +56,6 @@ export class CanvasAnalyserComponent {
           const newColor = `${colorkey.split(',')[0]}, ${totalS}%, ${totalL}%, ${totalA}`;
 
           this.globalColors.push(newColor);
-          // createNewSpanColor(paletteDom, newColor);
         }
       }
     }
@@ -69,7 +68,7 @@ function initCentroids(dataset: Array<number[]>, k: number): Array<string> {
   const centroidIndexes = [];
   let index;
   while (centroidIndexes.length < k) {
-    index = colorArray[Math.floor(Math.random() * (colorArray.length - 0) + 0)];
+    index = colorArray[(Math.floor(Math.random() * (colorArray.length - 0) + 0))]; // colorArray.length
     centroidIndexes.push(index.toString());
   }
   return centroidIndexes;
@@ -95,7 +94,10 @@ function updateCentroids(centroidMap: Map<string, Array<number[]>>):Map<string, 
   var newCentroidMap = new Map();
   centroidMap.forEach((value, key) => {
     const totalHue = value.reduce((partialSum, a) => partialSum + +a[0], 0) / value.length;
-    const newCentroid = `${totalHue}, 50%, 50%, 1`;
+    
+    const totalS = value.reduce((partialSum, a) => partialSum + +a[1], 0) / value.length;
+    const totalL = value.reduce((partialSum, a) => partialSum + +a[2], 0) / value.length;
+    const newCentroid = `${totalHue}, ${totalS}%, ${totalL}%, 1`;
     if (roundToZero(+key.split(',')[0]) !== roundToZero(totalHue)) {
       newCentroidMap.set(newCentroid, []);
     } else {
@@ -119,20 +121,6 @@ function isSameCentroids(centroids: Map<string, Array<number[]>>, newCentroids: 
   return true;
 }
 
-// function createNewSpanColor(parentDom: HTMLElement, color: string) {
-//   const newDiv = document.createElement("span");
-//   newDiv.style.width = 20 + "px";
-//   newDiv.style.height = 20 + "px";
-//   newDiv.style.background = `hsla(${color})`;
-//   newDiv.classList.add("color-analyser");
-//   parentDom.appendChild(newDiv);
-// }
-
-// function sortColorSetHue(colorPalette: Array<number>): Array<number> {
-//   const tmp = colorPalette.sort();//(a, b) => a[0] - b[0]);
-//   return tmp;
-// }
-
 function majorColors(hslArray: Array<(number)[]>): Set<string> {
   const colorSet: Set<string> = new Set();
 
@@ -142,8 +130,39 @@ function majorColors(hslArray: Array<(number)[]>): Set<string> {
   return colorSet;
 }
 
-function fromImageDataToColorArray(clampedArray: Uint8ClampedArray, translationFunction: Function) {
-  var colorArray: Array<(number)[]> = [];
+function cleanColorArrayDuplicates(colorArray: Array<number[]>): Array<number[]> {
+  let sortedArray: Array<number[]> = [];
+  for (let i = 0; i < colorArray.length; i++) {
+    if (sortedArray.length === 0 || !isElemIsIn2DArray(sortedArray, colorArray[i])) {
+      sortedArray.push(colorArray[i]);
+    }
+  }
+  return sortedArray;
+}
+
+function isElemIsIn2DArray(arrayToSearchIn: Array<number[]>, elem: number[]) {
+  let findElem: boolean = false;
+  for (let lineIndex = 0; lineIndex < arrayToSearchIn.length; lineIndex++){
+    if (elem[0] + 360 < arrayToSearchIn[lineIndex][0] + 2 + 360 &&
+      elem[0] + 360 > arrayToSearchIn[lineIndex][0] - 2 + 360) { // 10 = tolérance
+        
+        if (elem[1] < arrayToSearchIn[lineIndex][1] + 1 &&
+          elem[1] > arrayToSearchIn[lineIndex][1] - 1) {
+            
+          if (elem[2] < arrayToSearchIn[lineIndex][2] + 40 &&
+            elem[2] > arrayToSearchIn[lineIndex][2] - 40 ) {
+          
+            findElem = true;
+            break;
+          }
+        }
+    }
+  };
+  return findElem;
+}
+
+function fromImageDataToColorArray(clampedArray: Uint8ClampedArray, translationFunction: Function): Array<number[]> {
+  const colorArray: Array<number[]> = [];
   for (let i = 0; i <= clampedArray.length; i = i + 4) {
     if (clampedArray[i + 1] > 25 && clampedArray[i + 2] > 20 && clampedArray[ i + 3] > 0.1) {
       colorArray.push(translationFunction(clampedArray[i], clampedArray[i + 1], clampedArray[ i + 2], clampedArray[ i + 3]))
