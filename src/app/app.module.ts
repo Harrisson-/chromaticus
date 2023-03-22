@@ -6,6 +6,9 @@ import { AppComponent } from './app.component';
 import { CanvasAnalyserComponent } from './canvas-analyser/canvas-analyser.component';
 import { ColorBlocksComponent } from './color-blocks/color-blocks.component';
 import { ColorBlockComponent } from './color-block/color-block.component';
+import { OptionsPanelComponent } from './options-panel/options-panel.component';
+import { CustomCanvasComponent } from './custom-canvas/custom-canvas.component';
+import { CustomBtnComponent } from './custom-btn/custom-btn.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +16,9 @@ import { ColorBlockComponent } from './color-block/color-block.component';
     CanvasAnalyserComponent,
     ColorBlocksComponent,
     ColorBlockComponent,
+    OptionsPanelComponent,
+    CustomCanvasComponent,
+    CustomBtnComponent,
   ],
   imports: [
     BrowserModule,
