@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-custom-canvas',
-  templateUrl: './custom-canvas.component.html',
-  styleUrls: ['./custom-canvas.component.less']
+  selector: 'app-chromaticus-canvas',
+  templateUrl: './chromaticus-canvas.component.html',
+  styleUrls: ['./chromaticus-canvas.component.less'],
 })
-export class CustomCanvasComponent {
+export class ChromaticusCanvasComponent {
   private CANVAS_SIZE = 500;
 
+  constructor() {};
+  
   ngOnInit() {
-    const canvas = document.getElementById('custom-canvas') as HTMLCanvasElement;
+    const canvas = document.getElementById('chromaticus-canvas') as HTMLCanvasElement;
     const context = canvas.getContext('2d');
 
     let img = new Image();
@@ -22,7 +24,8 @@ export class CustomCanvasComponent {
     
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
       }
-      img.src = "./assets/vaporeon.png";
     }
+    img.src = "./assets/vaporeon.png"; 
   }
+  
 }

@@ -9,11 +9,11 @@
 // Densetsu Green
 @c-densetsu-green : #949d29;
 // Witch Brew
-@color : #7e8926;
+@c-brew : #7e8926;
 // Muddy Green
 @c-muddy-green : #66711f;
 // Reptile Revenge
-@color : #535616;
+@c-reptile-revenge : #535616;
 // Avocado Stone
 @color : #4a3c0e;
 // Meatloaf
@@ -40,12 +40,13 @@
 @c-body: @c-cortex;
 @c-btn-boder: @c-muddy-green;
 @c-btn-back: @c-Morocco;
-@c-canvas-border: @c-meatloaf;
-
+@c-canvas-border: @c-reptile-revenge;
+@c-panel-border: darken(@c-brew, 10%);
 // VAR END
 
 // BODY
 
 body {
-    background-color: @c-body;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: lighten(@c-body, 10%);
 }

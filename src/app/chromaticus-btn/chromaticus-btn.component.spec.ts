@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CustomCanvasComponent } from './custom-canvas.component';
+import { ChromaticusBtnComponent } from './chromaticus-btn.component';
 
-describe('CustomCanvasComponent', () => {
-  let component: CustomCanvasComponent;
-  let fixture: ComponentFixture<CustomCanvasComponent>;
+describe('ChromaticusBtnComponent', () => {
+  let component: ChromaticusBtnComponent;
+  let fixture: ComponentFixture<ChromaticusBtnComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CustomCanvasComponent ]
+      declarations: [ ChromaticusBtnComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CustomCanvasComponent);
+    fixture = TestBed.createComponent(ChromaticusBtnComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

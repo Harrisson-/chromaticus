@@ -1,0 +1,16 @@
+@import "../../styles.less";
+
+:host {
+    margin: 2px;
+    display: block;
+    max-height: fit-content;
+    max-width: fit-content;
+    padding: 5px;
+    background-color: lighten(@c-btn-back, 20%);
+    border: 2px solid lighten(@c-btn-boder, 5%);
+    transition: 0.3s;
+}
+
+:host:hover{
+    background-color: lighten(@c-btn-back, 10%);
+}

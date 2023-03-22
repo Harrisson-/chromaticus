@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { KmeansAlgoService } from '../kmeans-algo.service';
 import { ColorFormatCastService } from '../color-format-cast.service';
+
 @Component({
   selector: 'app-canvas-analyser',
   templateUrl: './canvas-analyser.component.html',
@@ -53,7 +54,7 @@ export class CanvasAnalyserComponent {
           }
           limitIndex += 1;
         }
-        console.log("prout", newCentroid);
+        console.log("centroids", newCentroid);
         for (const [colorkey, colorSet] of newCentroid) {
           const totalS = colorSet.reduce((partialSum, a) => {
             return partialSum + a[1];

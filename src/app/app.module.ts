@@ -7,8 +7,8 @@ import { CanvasAnalyserComponent } from './canvas-analyser/canvas-analyser.compo
 import { ColorBlocksComponent } from './color-blocks/color-blocks.component';
 import { ColorBlockComponent } from './color-block/color-block.component';
 import { OptionsPanelComponent } from './options-panel/options-panel.component';
-import { CustomCanvasComponent } from './custom-canvas/custom-canvas.component';
-import { CustomBtnComponent } from './custom-btn/custom-btn.component';
+import { ChromaticusCanvasComponent } from './chromaticus-canvas/chromaticus-canvas.component';
+import { ChromaticusBtnComponent  } from './chromaticus-btn/chromaticus-btn.component';
 
 @NgModule({
   declarations: [
@@ -17,8 +17,8 @@ import { CustomBtnComponent } from './custom-btn/custom-btn.component';
     ColorBlocksComponent,
     ColorBlockComponent,
     OptionsPanelComponent,
-    CustomCanvasComponent,
-    CustomBtnComponent,
+    ChromaticusCanvasComponent,
+    ChromaticusBtnComponent,
   ],
   imports: [
     BrowserModule,
