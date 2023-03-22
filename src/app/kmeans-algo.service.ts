@@ -12,12 +12,12 @@ export class KmeansAlgoService {
     const centroidIndexes = [];
     let index;
     while (centroidIndexes.length < k) {
-      index = colorArray[Math.floor(Math.random() * (colorArray.length - 0) + 0)];
+      index = colorArray[(Math.floor(Math.random() * (colorArray.length - 0) + 0))]; // colorArray.length
       centroidIndexes.push(index.toString());
     }
     return centroidIndexes;
   }
-
+  
   fillCentroidsDataset(dataset: Array<number[]>, centroidsIndexes: Array<string>): Map<string, Array<number[]>> {
     var centroidMap = new Map();
     centroidsIndexes.forEach(centroid => centroidMap.set(centroid.toString(), []));      
@@ -38,7 +38,10 @@ export class KmeansAlgoService {
     var newCentroidMap = new Map();
     centroidMap.forEach((value, key) => {
       const totalHue = value.reduce((partialSum, a) => partialSum + +a[0], 0) / value.length;
-      const newCentroid = `${totalHue}, 50%, 50%, 1`;
+      
+      const totalS = value.reduce((partialSum, a) => partialSum + +a[1], 0) / value.length;
+      const totalL = value.reduce((partialSum, a) => partialSum + +a[2], 0) / value.length;
+      const newCentroid = `${totalHue}, ${totalS}%, ${totalL}%, 1`;
       if (this.roundToZero(+key.split(',')[0]) !== this.roundToZero(totalHue)) {
         newCentroidMap.set(newCentroid, []);
       } else {
@@ -60,6 +63,37 @@ export class KmeansAlgoService {
       }
     }
     return true;
+  }
+
+  cleanColorArrayDuplicates(colorArray: Array<number[]>): Array<number[]> {
+    let sortedArray: Array<number[]> = [];
+    for (let i = 0; i < colorArray.length; i++) {
+      if (sortedArray.length === 0 || !this.isElemIsIn2DArray(sortedArray, colorArray[i])) {
+        sortedArray.push(colorArray[i]);
+      }
+    }
+    return sortedArray;
+  }
+
+  isElemIsIn2DArray(arrayToSearchIn: Array<number[]>, elem: number[]) {
+    let findElem: boolean = false;
+    for (let lineIndex = 0; lineIndex < arrayToSearchIn.length; lineIndex++){
+      if (elem[0] + 360 < arrayToSearchIn[lineIndex][0] + 2 + 360 &&
+        elem[0] + 360 > arrayToSearchIn[lineIndex][0] - 2 + 360) { // 10 = tolérance
+          
+          if (elem[1] < arrayToSearchIn[lineIndex][1] + 1 &&
+            elem[1] > arrayToSearchIn[lineIndex][1] - 1) {
+              
+            if (elem[2] < arrayToSearchIn[lineIndex][2] + 40 &&
+              elem[2] > arrayToSearchIn[lineIndex][2] - 40 ) {
+            
+              findElem = true;
+              break;
+            }
+          }
+      }
+    };
+    return findElem;
   }
 
   roundToZero(value: number) {
