@@ -67,7 +67,7 @@ export class CanvasAnalyserComponent {
         }
       }
     }
-    img.src = "./assets/vaporeon.png";
+    img.src = "./assets/innoncentXBacon.jpg"; //vaporeon.png";
   }
 }
 

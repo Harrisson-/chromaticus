@@ -25,7 +25,7 @@ export class ChromaticusCanvasComponent {
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
       }
     }
-    img.src = "./assets/vaporeon.png"; 
+    img.src = "./assets/innoncentXBacon.jpg"; //vaporeon.png"; 
   }
   
 }
