@@ -15,6 +15,8 @@ export class ColorBlockComponent {
 
   constructor(private colorFormat: ColorFormatCastService) {}
   
+  // listen an event
+
   ngOnInit(){
     let [h, s, l] = this.color.split(',');
     this.hexaCode = this.colorFormat.hslToHex(+h, +s.slice(0, -1), +l.slice(0, -1));

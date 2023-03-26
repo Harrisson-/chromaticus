@@ -1,0 +1,7 @@
+<label [for]="id">{{label}}</label>
+<select name="test" [id]="id">
+    <option *ngFor="let option of options" [value]="option">
+        {{option}}
+    </option>
+</select>
+<!-- option list cannot be stylized -->

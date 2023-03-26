@@ -9,6 +9,9 @@ import { ColorBlockComponent } from './color-block/color-block.component';
 import { OptionsPanelComponent } from './options-panel/options-panel.component';
 import { ChromaticusCanvasComponent } from './chromaticus-canvas/chromaticus-canvas.component';
 import { ChromaticusBtnComponent  } from './chromaticus-btn/chromaticus-btn.component';
+import { ToggleBtnComponent } from './toggle-btn/toggle-btn.component';
+import { ChromaticusSelectBtnComponent } from './chromaticus-select-btn/chromaticus-select-btn.component';
+import { ChromaticusRangeBtnComponent } from './chromaticus-range-btn/chromaticus-range-btn.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +22,9 @@ import { ChromaticusBtnComponent  } from './chromaticus-btn/chromaticus-btn.comp
     OptionsPanelComponent,
     ChromaticusCanvasComponent,
     ChromaticusBtnComponent,
+    ToggleBtnComponent,
+    ChromaticusSelectBtnComponent,
+    ChromaticusRangeBtnComponent,
   ],
   imports: [
     BrowserModule,

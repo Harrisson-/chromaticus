@@ -1,3 +1,13 @@
-<app-chromaticus-btn title="test"></app-chromaticus-btn>
-<app-chromaticus-btn title="very long long text"></app-chromaticus-btn>
+<app-chromaticus-btn title="launch analyse"></app-chromaticus-btn>
 <app-chromaticus-btn title="SELECT AN IMAGE"></app-chromaticus-btn>
+<app-toggle-btn StateOne="quantity" StateTwo="quality" (actualState)="getState($event)"></app-toggle-btn>
+
+<div *ngIf="analysisType === 'quality'">    
+    <app-chromaticus-select-btn 
+    label="loop"
+    title="loop nbr"
+    [options]="['none', '1', '5', '10', '20']"
+    ></app-chromaticus-select-btn>
+    <app-chromaticus-range-btn label="luminosity" max="40"></app-chromaticus-range-btn>
+    <app-chromaticus-range-btn label="saturation" max="40"></app-chromaticus-range-btn>
+</div>

@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./options-panel.component.less']
 })
 export class OptionsPanelComponent {
+  analysisType: string = '';
 
+  getState(selectedValue: string) {
+    this.analysisType = selectedValue;
+  }
 }

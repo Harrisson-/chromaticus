@@ -1,4 +1,4 @@
-<div class="color-block-line">
+<div class="color-block-line" ng-if="colors.length > 0">
     <div *ngFor="let color of colors">
         <app-color-block [color]="color"></app-color-block>
     </div>

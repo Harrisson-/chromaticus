@@ -23,6 +23,7 @@ export class ChromaticusCanvasComponent {
         canvas.height = size / ratio;
     
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
+        // trigger an event
       }
     }
     img.src = "./assets/innoncentXBacon.jpg"; //vaporeon.png"; 
