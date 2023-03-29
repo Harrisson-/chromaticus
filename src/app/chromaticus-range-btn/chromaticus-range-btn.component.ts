@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-chromaticus-range-btn',
@@ -7,14 +7,22 @@ import { Component, Input } from '@angular/core';
 })
 export class ChromaticusRangeBtnComponent {
   selectedValue: number = 0;
+  steps: number = 0;
+
   @Input() max: string = '40';
   @Input() label: string = '';
 
+  @Output() actualRange = new EventEmitter<number>();
+
   constructor() {}
+
+  ngOnInit() {
+    this.steps = Math.round(+this.max / 5);  
+  }
 
   setRam(value: string){
     this.selectedValue = +value;
-    console.log(this.selectedValue);
+    this.actualRange.emit(this.selectedValue);
   }
 
 }

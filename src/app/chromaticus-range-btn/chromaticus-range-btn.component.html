@@ -1,5 +1,14 @@
 <div>
     <input type="range" [id]="" [name]="label" 
-           min="0" [max]="max" value="0" step="5" (ngModelChange)="setRam">
+           min="0" [max]="max" value="steps" step="5" (ngModelChange)="setRam">
     <label [for]="label">{{label}}</label>
+
+    <datalist id="steps">
+        <!-- use this.steps -->
+        <option value="0" label="very cold!"></option>
+        <option value="25" label="cool"></option>
+        <option value="50" label="medium"></option>
+        <option value="75" label="getting warm!"></option>
+        <option value="100" label="hot!"></option>
+    </datalist>
 </div>

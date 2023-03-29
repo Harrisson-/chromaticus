@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-chromaticus-btn',
@@ -8,12 +8,14 @@ import { Component, Input } from '@angular/core';
 export class ChromaticusBtnComponent {
   @Input() title: string = '';
 
-  @Function() toto: Function = () => {}; 
+  @Function() toto: Function = () => {};
+
+  @Output() action = new EventEmitter<void>();
 
   constructor() {}
 
-  eventTrigger(event: Event) {
-    console.log('hello', event)
+  eventTrigger(_event: Event) {
+    this.action.emit();
   }
 
 }

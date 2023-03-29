@@ -10,10 +10,10 @@
 
 </style>
 
-<!-- <app-chromaticus-canvas></app-chromaticus-canvas>
+<app-chromaticus-canvas (imgContextData)="getImageDatas($event)"></app-chromaticus-canvas>
 
-<app-canvas-analyser></app-canvas-analyser> -->
-<app-options-panel></app-options-panel>
+<app-color-blocks [colors]="globalColors"></app-color-blocks>
+<app-options-panel (kMeansColor)="getColors($event)" [datas]="imgDatas"></app-options-panel>
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->
 <!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
