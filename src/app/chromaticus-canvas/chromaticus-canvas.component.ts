@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 
 @Component({
   selector: 'app-chromaticus-canvas',
@@ -8,10 +8,16 @@ import { Component, EventEmitter, Output } from '@angular/core';
 export class ChromaticusCanvasComponent {
   private CANVAS_SIZE = 500;
 
+  @Input() 
+  public set imgToUpload(val: string) {
+    this.imgToUpload = val;
+    this.fullfilCanvas();
+  };
+
   @Output() imgContextData = new EventEmitter<Uint8ClampedArray>;
   constructor() {};
   
-  ngOnInit() {
+  fullfilCanvas() {
     const canvas = document.getElementById('chromaticus-canvas') as HTMLCanvasElement;
     const context = canvas.getContext('2d');
 
@@ -28,7 +34,7 @@ export class ChromaticusCanvasComponent {
         this.imgContextData.emit(context.getImageData(0, 0, canvas.width, canvas.height).data);
       }
     }
-    img.src = "./assets/innoncentXBacon.jpg"; //vaporeon.png"; 
+    img.src = this.imgToUpload; // "./assets/innoncentXBacon.jpg"; //vaporeon.png"; 
   }
   
 }

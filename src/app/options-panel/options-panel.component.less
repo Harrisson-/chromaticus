@@ -2,6 +2,7 @@
 
 :host {
     display: flex;
+    flex-direction: column;
     width: 500px;
     height: 500px;
     border: 5px solid @c-panel-border;
@@ -9,5 +10,9 @@
     .launch-analyse {
         display: flex;
         align-self: flex-end;
+    }
+
+    p {
+        flex-grow: 1;
     }
 }

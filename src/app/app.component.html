@@ -10,7 +10,8 @@
 
 </style>
 
-<app-chromaticus-canvas (imgContextData)="getImageDatas($event)"></app-chromaticus-canvas>
+<app-chromaticus-canvas [imgToUpload]="fileToUpload" (imgContextData)="getImageDatas($event)"></app-chromaticus-canvas>
+<input type="file" name="SELECT AN IMAGE" (change)="getImage($event)"/>
 
 <app-color-blocks [colors]="globalColors"></app-color-blocks>
 <app-options-panel (kMeansColor)="getColors($event)" [datas]="imgDatas"></app-options-panel>

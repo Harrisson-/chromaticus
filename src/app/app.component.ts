@@ -9,6 +9,7 @@ export class AppComponent {
 
   imgDatas: Uint8ClampedArray = new Uint8ClampedArray();
   globalColors: Array<string> = [];
+  fileToUpload: any;
 
   constructor() {}
   
@@ -18,5 +19,11 @@ export class AppComponent {
 
   getColors(value: Array<string>) {
     this.globalColors = value;
+  }
+
+  getImage(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const files = target.files as FileList;
+    this.fileToUpload =  URL.createObjectURL(files[0]);
   }
 }

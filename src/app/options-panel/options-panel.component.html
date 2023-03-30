@@ -1,14 +1,32 @@
-<app-chromaticus-btn title="SELECT AN IMAGE"></app-chromaticus-btn>
 <app-toggle-btn StateOne="quantity" StateTwo="quality" (actualState)="getState($event)"></app-toggle-btn>
 
 <div *ngIf="analysisType === 'quality'">    
     <app-chromaticus-select-btn 
-    label="loop"
+    label="limit loops"
     title="loop nbr"
     [options]="['none', '1', '5', '10', '20']"
     ></app-chromaticus-select-btn>
     <app-chromaticus-range-btn label="luminosity" max="40" (actualRange)="getLuminosity($event)"></app-chromaticus-range-btn>
     <app-chromaticus-range-btn label="saturation" max="40" (actualRange)="getSaturation($event)"></app-chromaticus-range-btn>
 </div>
+
+<p>
+    Quantity / quality
+    With quality you can customize your analyse: 
+        limited or not the amount of loop made by k-means algorithm
+        limite or not the tolerance of luminosity and saturation for the analysed colors
+</p>
+
+
+<p>
+    Warning:
+    K-means algorithm is not a perfect solution to anaylyse cluster.
+    Due to the fact that initalisation of the algo use randomised value, from an analyse to another you can have slitghy different results
+</p>
+
+<p>
+    Tips:
+    To reduce analyse type and get pertinent results, you can limit loop to 5 and put luminosity and/or saturation to 20.
+</p>
 
 <app-chromaticus-btn class="launch-analyse" (action)="launchAnalyse()" title="launch analyse"></app-chromaticus-btn>
