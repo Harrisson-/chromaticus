@@ -10,11 +10,13 @@ export class AppComponent {
   imgDatas: Uint8ClampedArray = new Uint8ClampedArray();
   globalColors: Array<string> = [];
   fileToUpload: any;
+  disablePanel: boolean = true;
 
   constructor() {}
   
   getImageDatas(value: Uint8ClampedArray) {
     this.imgDatas = value;
+    this.disablePanel = !Boolean(value.length > 0);
   }
 
   getColors(value: Array<string>) {

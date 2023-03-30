@@ -3,9 +3,11 @@
 :host {
     display: flex;
     flex-direction: column;
-    width: 500px;
-    height: 500px;
+    min-width: 200px;
+    min-height: 200px;
     border: 5px solid @c-panel-border;
+    max-width: 400px;
+    height: fit-content;
 
     .launch-analyse {
         display: flex;

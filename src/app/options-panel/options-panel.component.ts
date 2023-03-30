@@ -11,15 +11,14 @@ export class OptionsPanelComponent {
   analysisType: string = '';
   saturation: number = 0;
   luminosity: number = 0;
-
-  private CANVAS_SIZE = 500;
-  private LIMITE_LOOP = 5;
+  loop_limit: number = 5;
+  
   private centroidNumber: number = 8;
-  private quantity: boolean = false;
   
   public globalColors: string[] = [];
 
   @Input() datas: Uint8ClampedArray = new Uint8ClampedArray();
+  @Input() disable: boolean = true;
 
   @Output() kMeansColor = new EventEmitter<Array<string>>;
 
@@ -38,10 +37,15 @@ export class OptionsPanelComponent {
     this.luminosity = selectedValue;
   }
 
+  getSelection(selection: number) {
+    this.loop_limit = selection;
+  }
+
   launchAnalyse() {            
     this.globalColors = [];
-    let hslArray = this.fromImageDataToColorArray(this.datas, this.colorCastService.rgbToHsl2);//rgbToHsl);
+    let hslArray = this.fromImageDataToColorArray(this.datas, this.colorCastService.rgbToHsl2); //rgbToHsl);
     if (this.analysisType === "quality") {
+      this.kmeansService.setUpService(this.saturation, this.luminosity);
       hslArray = this.kmeansService.cleanColorArrayDuplicates(hslArray);
     }
     
@@ -49,7 +53,7 @@ export class OptionsPanelComponent {
     let centroidMap = this.kmeansService.fillCentroidsDataset(hslArray, centroids);
     let newCentroid = new Map<string, Array<number[]>>();
     let limitIndex = 0;
-    while (true || limitIndex < this.LIMITE_LOOP) {
+    while (true || limitIndex < this.loop_limit) {
       newCentroid = this.kmeansService.updateCentroids(centroidMap);
       if (!this.kmeansService.isSameCentroids(centroidMap, newCentroid)) {
         centroidMap = this.kmeansService.fillCentroidsDataset(hslArray, [...newCentroid.keys()]);

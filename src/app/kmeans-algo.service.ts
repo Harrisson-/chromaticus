@@ -5,7 +5,15 @@ import { Injectable } from '@angular/core';
 })
 export class KmeansAlgoService {
 
-  // constructor() { }
+  _luminosity: number = 1;
+  _saturation: number = 40;
+
+  constructor() {}
+  
+  setUpService(saturation: number, luminosity: number): void {
+    this._saturation = saturation;
+    this._luminosity = luminosity;
+  }
 
   initCentroids(dataset: Array<number[]>, k: number): Array<string> {
     const colorArray = [...dataset];
@@ -81,12 +89,12 @@ export class KmeansAlgoService {
       if (elem[0] + 360 < arrayToSearchIn[lineIndex][0] + 2 + 360 &&
         elem[0] + 360 > arrayToSearchIn[lineIndex][0] - 2 + 360) { // 10 = tolérance
           
-          if (elem[1] < arrayToSearchIn[lineIndex][1] + 1 &&
-            elem[1] > arrayToSearchIn[lineIndex][1] - 1) {
+          if (elem[1] < arrayToSearchIn[lineIndex][1] + this._saturation &&
+            elem[1] > arrayToSearchIn[lineIndex][1] - this._saturation) {
               
-            if (elem[2] < arrayToSearchIn[lineIndex][2] + 40 &&
-              elem[2] > arrayToSearchIn[lineIndex][2] - 40 ) {
-            
+            if (elem[2] < arrayToSearchIn[lineIndex][2] + this._luminosity &&
+              elem[2] > arrayToSearchIn[lineIndex][2] - this._luminosity ) {
+
               findElem = true;
               break;
             }

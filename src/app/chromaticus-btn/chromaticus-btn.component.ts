@@ -7,6 +7,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class ChromaticusBtnComponent {
   @Input() title: string = '';
+  @Input() disable: boolean = true;
 
   @Function() toto: Function = () => {};
 
@@ -17,5 +18,4 @@ export class ChromaticusBtnComponent {
   eventTrigger(_event: Event) {
     this.action.emit();
   }
-
 }

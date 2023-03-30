@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-chromaticus-select-btn',
@@ -12,11 +12,15 @@ export class ChromaticusSelectBtnComponent {
   @Input() title: string = '';
   @Input() label: string = '';
 
+  @Output() selection = new EventEmitter<number>();
+
   constructor() {
     this.id = 'select-' + Math.floor(Math.random() * 10 + 0);
   }
 
-  ngOninit() {
-    console.log("options", this.options)
+  onChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const value = target.value as string;
+    this.selection.emit(+value);
   }
 }

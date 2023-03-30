@@ -1,6 +1,6 @@
 <div>
     <input type="range" [id]="" [name]="label" 
-           min="0" [max]="max" value="steps" step="5" (ngModelChange)="setRam">
+           min="0" [max]="max" value="steps" step="5" (change)="setRam($event)">
     <label [for]="label">{{label}}</label>
 
     <datalist id="steps">

@@ -1,11 +1,11 @@
 <app-toggle-btn StateOne="quantity" StateTwo="quality" (actualState)="getState($event)"></app-toggle-btn>
-
-<div *ngIf="analysisType === 'quality'">    
-    <app-chromaticus-select-btn 
+<app-chromaticus-select-btn 
     label="limit loops"
     title="loop nbr"
+    (selection)="getSelection($event)"
     [options]="['none', '1', '5', '10', '20']"
-    ></app-chromaticus-select-btn>
+></app-chromaticus-select-btn>
+<div *ngIf="analysisType === 'quality'">
     <app-chromaticus-range-btn label="luminosity" max="40" (actualRange)="getLuminosity($event)"></app-chromaticus-range-btn>
     <app-chromaticus-range-btn label="saturation" max="40" (actualRange)="getSaturation($event)"></app-chromaticus-range-btn>
 </div>
@@ -29,4 +29,4 @@
     To reduce analyse type and get pertinent results, you can limit loop to 5 and put luminosity and/or saturation to 20.
 </p>
 
-<app-chromaticus-btn class="launch-analyse" (action)="launchAnalyse()" title="launch analyse"></app-chromaticus-btn>
+<app-chromaticus-btn [disable]="disable" class="launch-analyse" (action)="launchAnalyse()" title="launch analyse"></app-chromaticus-btn>

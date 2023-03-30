@@ -1,26 +1,9 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<style>
+<div class="canvas-block">
+    <app-chromaticus-canvas [imgToUpload]="fileToUpload" (imgContextData)="getImageDatas($event)"></app-chromaticus-canvas>
+    <input type="file" name="SELECT AN IMAGE" (change)="getImage($event)"/>
+    <app-color-blocks [colors]="globalColors"></app-color-blocks>
+</div>
 
-</style>
+<app-options-panel [disable]="disablePanel" (kMeansColor)="getColors($event)" [datas]="imgDatas"></app-options-panel>
 
-<app-chromaticus-canvas [imgToUpload]="fileToUpload" (imgContextData)="getImageDatas($event)"></app-chromaticus-canvas>
-<input type="file" name="SELECT AN IMAGE" (change)="getImage($event)"/>
-
-<app-color-blocks [colors]="globalColors"></app-color-blocks>
-<app-options-panel (kMeansColor)="getColors($event)" [datas]="imgDatas"></app-options-panel>
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-<router-outlet></router-outlet>
+<!-- <router-outlet></router-outlet> -->

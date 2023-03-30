@@ -20,9 +20,9 @@ export class ChromaticusRangeBtnComponent {
     this.steps = Math.round(+this.max / 5);  
   }
 
-  setRam(value: string){
-    this.selectedValue = +value;
+  setRam(event: Event){
+    const target = event.target as HTMLInputElement;
+    this.selectedValue = +target.value;
     this.actualRange.emit(this.selectedValue);
   }
-
 }

@@ -1,5 +1,5 @@
 <label [for]="id">{{label}}</label>
-<select name="test" [id]="id">
+<select name="test" [id]="id" (change)="onChange($event)">
     <option *ngFor="let option of options" [value]="option">
         {{option}}
     </option>
