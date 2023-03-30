@@ -7,10 +7,11 @@ import { Component, EventEmitter, Output, Input } from '@angular/core';
 })
 export class ChromaticusCanvasComponent {
   private CANVAS_SIZE = 500;
+  private _imgToUpload: string = '';
 
   @Input() 
   public set imgToUpload(val: string) {
-    this.imgToUpload = val;
+    this._imgToUpload = val;
     this.fullfilCanvas();
   };
 
@@ -34,7 +35,7 @@ export class ChromaticusCanvasComponent {
         this.imgContextData.emit(context.getImageData(0, 0, canvas.width, canvas.height).data);
       }
     }
-    img.src = this.imgToUpload; // "./assets/innoncentXBacon.jpg"; //vaporeon.png"; 
+    img.src = this._imgToUpload; // "./assets/innoncentXBacon.jpg"; //vaporeon.png"; 
   }
   
 }
