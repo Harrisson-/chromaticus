@@ -31,8 +31,6 @@ export class OptionsPanelComponent {
     private colorCastService: ColorFormatCastService
   ) {
     this.kmeansService = new KmeansAlgoService();
-    this.kmeansService.setCentroidNumber(this.centroidNumber);
-    this.kmeansService.setLoopTime(this.loop_limit);
   }
 
   ngOnInit() {
@@ -42,7 +40,7 @@ export class OptionsPanelComponent {
         this.showLoader.emit(event.data.value);
       } else {
         this.newCentroid = event.data.value;
-        console.log("centroids", this.newCentroid);
+          console.log("centroids", this.newCentroid);
         for (const [colorkey, colorSet] of this.newCentroid) {
           const totalS = colorSet.reduce((partialSum, a) => {
             return partialSum + a[1];
