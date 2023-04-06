@@ -26,6 +26,7 @@ export class OptionsPanelComponent {
 
   @Output() kMeansColor = new EventEmitter<Array<string>>;
   @Output() showLoader = new EventEmitter<boolean>;
+  @Output() textLoader = new EventEmitter<string>;
 
   constructor(
     private colorCastService: ColorFormatCastService
@@ -38,6 +39,8 @@ export class OptionsPanelComponent {
     this.thread.onmessage = (event) => {
       if (event.data.key === "loading") {
         this.showLoader.emit(event.data.value);
+      } else if (event.data.key === "text") {
+        this.textLoader.emit(event.data.value);
       } else {
         this.newCentroid = event.data.value;
           console.log("centroids", this.newCentroid);

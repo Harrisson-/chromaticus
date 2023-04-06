@@ -1,9 +1,9 @@
-<app-loop-loader [show]="showLoader" [stepText]="loaderText"></app-loop-loader>
+<app-loop-loader [show]="showLoader" [stepText]="textLoader"></app-loop-loader>
 <div class="canvas-block">
     <app-chromaticus-canvas [imgToUpload]="fileToUpload" (imgContextData)="getImageDatas($event)"></app-chromaticus-canvas>
     <input type="file" name="SELECT AN IMAGE" (change)="getImage($event)"/>
     <app-color-blocks [colors]="globalColors"></app-color-blocks>
 </div>
 
-<app-options-panel [disable]="disablePanel" (kMeansColor)="getColors($event)" [datas]="imgDatas" (showLoader)="getLoaderState($event)"></app-options-panel>
+<app-options-panel [disable]="disablePanel" (kMeansColor)="getColors($event)" [datas]="imgDatas" (showLoader)="getLoaderState($event)" (textLoader)="getTextLoader($event)"></app-options-panel>
 <!-- <router-outlet></router-outlet> -->

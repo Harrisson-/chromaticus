@@ -1,38 +1,49 @@
 /// <reference lib="webworker" />
 
-const calculation = {
-    analyzeImageData: (hslArray: Array<number[]>, setupAlgo: any): Map<string, Array<number[]>> => {
-        const centroids = initCentroids(hslArray, setupAlgo.centroidNumber);
-        let centroidMap = fillCentroidsDataset(hslArray, centroids);
-        let newCentroid = new Map();
-        let limitIndex = 0;
-        while (true || limitIndex < setupAlgo.loopLimit) {
-            newCentroid = updateCentroids(centroidMap);
-            if (!isSameCentroids(centroidMap, newCentroid)) {
-            centroidMap = fillCentroidsDataset(hslArray, [...newCentroid.keys()]);
-            } else {
-            break;
-            }
-            limitIndex += 1;
-        }
-        return newCentroid; 
-    }
-};
+// const calculation = {
+//     analyzeImageData: (hslArray: Array<number[]>, setupAlgo: any): Map<string, Array<number[]>> => {
+//         // const centroids = initCentroids(hslArray, setupAlgo.centroidNumber);
+//         // postMessage({value: "step text i'm stuck"});
+//         // let centroidMap = fillCentroidsDataset(hslArray, centroids);
+//         // let newCentroid = new Map();
+//         // let limitIndex = 0;
+//         // while (true || limitIndex < setupAlgo.loopLimit) {
+//         //     newCentroid = updateCentroids(centroidMap);
+//         //     if (!isSameCentroids(centroidMap, newCentroid)) {
+//         //     centroidMap = fillCentroidsDataset(hslArray, [...newCentroid.keys()]);
+//         //     } else {
+//         //     break;
+//         //     }
+//         //     limitIndex += 1;
+//         // }
+//         // postMessage({value: ""});
+//         // return newCentroid; 
+//     }
+// };
 
 addEventListener('message', ({ data }) => {
-  postMessage({ key: "loading", value: true });
-  if (Object.keys(calculation).includes(data.method)) {
+    postMessage({ key: "loading", value: true });
+    postMessage({key: "text", value: "centroids initialization"});
+    const centroids = initCentroids(data.hslArray, data.setupAlgo.centroidNumber);
+    let centroidMap = fillCentroidsDataset(data.hslArray, centroids);
+    let newCentroid = new Map();
+    let limitIndex = 0;
+    while (true || limitIndex < data.setupAlgo.loopLimit) {
+        postMessage({key: "text", value: `cluterise data loop n°${limitIndex + 1}`});
+        newCentroid = updateCentroids(centroidMap);
+        if (!isSameCentroids(centroidMap, newCentroid)) {
+        centroidMap = fillCentroidsDataset(data.hslArray, [...newCentroid.keys()]);
+        } else {
+        break;
+        }
+        limitIndex += 1;
+    }
+    postMessage({key: "text", value: ""});
     postMessage({
-      value: calculation.analyzeImageData([...data.hslArray], data.setupAlgo),
+        value: newCentroid,
     });
-  } else {
-    // POST ERROR MESSAGE
-    // postMessage({
-    //   key: "error",
-    //   value: `No calculation found ${data.method ? `for type ${data.method}` : ''}`,
-    // });
-  }
-  postMessage({ key: "loading", value: false });
+
+    postMessage({ key: "loading", value: false });
 });
 
 const defaultSetup = {

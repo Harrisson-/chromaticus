@@ -11,7 +11,7 @@ export class AppComponent {
   globalColors: Array<string> = [];
   fileToUpload: any;
   disablePanel: boolean = true;
-  loaderText: string = '';
+  textLoader: string = '';
   showLoader: boolean = false;
 
   constructor() {}
@@ -34,5 +34,9 @@ export class AppComponent {
   getLoaderState(value: boolean) {
     console.log('update loader state', value);
     this.showLoader = value;
+  }
+
+  getTextLoader(value: string) {
+    this.textLoader = value;
   }
 }
