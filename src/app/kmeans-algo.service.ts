@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+// TODO: DELETE UNUSED FUCTION
 @Injectable({
   providedIn: 'root'
 })
@@ -7,8 +8,18 @@ export class KmeansAlgoService {
 
   _luminosity: number = 1;
   _saturation: number = 40;
+  _centroidNumber: number = 8;
+  _loopLimit: number = 5;
 
   constructor() {}
+
+  setCentroidNumber(value: number) {
+    this._centroidNumber = value;
+  }
+  
+  setLoopTime(value: number) {
+    this._loopLimit = value;
+  }
   
   setUpService(saturation: number, luminosity: number): void {
     this._saturation = saturation;
@@ -106,6 +117,23 @@ export class KmeansAlgoService {
 
   roundToZero(value: number) {
     return Math.round((value + Number.EPSILON) * 1) / 1
+  }
+
+  analyzeImageData(hslArray: Array<number[]>): Map<string, Array<number[]>> {
+    const centroids = this.initCentroids(hslArray, this._centroidNumber);
+    let centroidMap = this.fillCentroidsDataset(hslArray, centroids);
+    let newCentroid = new Map<string, Array<number[]>>();
+    let limitIndex = 0;
+    while (true || limitIndex < this._loopLimit) {
+      newCentroid = this.updateCentroids(centroidMap);
+      if (!this.isSameCentroids(centroidMap, newCentroid)) {
+        centroidMap = this.fillCentroidsDataset(hslArray, [...newCentroid.keys()]);
+      } else {
+        break;
+      }
+      limitIndex += 1;
+    }
+    return newCentroid; 
   }
   
 }

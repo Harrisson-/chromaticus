@@ -11,6 +11,7 @@ import { ChromaticusBtnComponent  } from './chromaticus-btn/chromaticus-btn.comp
 import { ToggleBtnComponent } from './toggle-btn/toggle-btn.component';
 import { ChromaticusSelectBtnComponent } from './chromaticus-select-btn/chromaticus-select-btn.component';
 import { ChromaticusRangeBtnComponent } from './chromaticus-range-btn/chromaticus-range-btn.component';
+import { LoopLoaderComponent } from './loop-loader/loop-loader.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ChromaticusRangeBtnComponent } from './chromaticus-range-btn/chromaticu
     ToggleBtnComponent,
     ChromaticusSelectBtnComponent,
     ChromaticusRangeBtnComponent,
+    LoopLoaderComponent,
   ],
   imports: [
     BrowserModule,

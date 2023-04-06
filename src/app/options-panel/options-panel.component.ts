@@ -14,16 +14,49 @@ export class OptionsPanelComponent {
   loop_limit: number = 5;
   
   private centroidNumber: number = 8;
-  
+  private kmeansService: any;
+
+  private thread: Worker = new Worker(new URL('../app.worker', import.meta.url));
+  private newCentroid: Map<string, Array<number[]>> = new Map();
+
   public globalColors: string[] = [];
 
   @Input() datas: Uint8ClampedArray = new Uint8ClampedArray();
   @Input() disable: boolean = true;
 
   @Output() kMeansColor = new EventEmitter<Array<string>>;
+  @Output() showLoader = new EventEmitter<boolean>;
 
-  constructor(private kmeansService: KmeansAlgoService,
-    private colorCastService: ColorFormatCastService) {}
+  constructor(
+    private colorCastService: ColorFormatCastService
+  ) {
+    this.kmeansService = new KmeansAlgoService();
+    this.kmeansService.setCentroidNumber(this.centroidNumber);
+    this.kmeansService.setLoopTime(this.loop_limit);
+  }
+
+  ngOnInit() {
+
+    this.thread.onmessage = (event) => {
+      if (event.data.key === "loading") {
+        this.showLoader.emit(event.data.value);
+      } else {
+        this.newCentroid = event.data.value;
+        console.log("centroids", this.newCentroid);
+        for (const [colorkey, colorSet] of this.newCentroid) {
+          const totalS = colorSet.reduce((partialSum, a) => {
+            return partialSum + a[1];
+          }, 0) / colorSet.length;
+          const totalL = colorSet.reduce((partialSum, a) => partialSum + a[2], 0) / colorSet.length;
+          const totalA = colorSet.reduce((partialSum, a) => partialSum + a[3], 0) / colorSet.length;
+          const newColor = `${colorkey.split(',')[0]}, ${totalS}%, ${totalL}%, ${totalA}`;
+    
+          this.globalColors.push(newColor);
+        }
+        this.kMeansColor.emit(this.globalColors);
+      }
+    };
+  }
 
   getState(selectedValue: string) {
     this.analysisType = selectedValue;
@@ -41,39 +74,23 @@ export class OptionsPanelComponent {
     this.loop_limit = selection;
   }
 
-  launchAnalyse() {            
+  launchAnalyse() {
+    this.showLoader.emit(true);
     this.globalColors = [];
     let hslArray = this.fromImageDataToColorArray(this.datas, this.colorCastService.rgbToHsl2); //rgbToHsl);
     if (this.analysisType === "quality") {
       this.kmeansService.setUpService(this.saturation, this.luminosity);
       hslArray = this.kmeansService.cleanColorArrayDuplicates(hslArray);
     }
-    
-    const centroids = this.kmeansService.initCentroids(hslArray, this.centroidNumber);
-    let centroidMap = this.kmeansService.fillCentroidsDataset(hslArray, centroids);
-    let newCentroid = new Map<string, Array<number[]>>();
-    let limitIndex = 0;
-    while (true || limitIndex < this.loop_limit) {
-      newCentroid = this.kmeansService.updateCentroids(centroidMap);
-      if (!this.kmeansService.isSameCentroids(centroidMap, newCentroid)) {
-        centroidMap = this.kmeansService.fillCentroidsDataset(hslArray, [...newCentroid.keys()]);
-      } else {
-        break;
-      }
-      limitIndex += 1;
-    }
-    console.log("centroids", newCentroid);
-    for (const [colorkey, colorSet] of newCentroid) {
-      const totalS = colorSet.reduce((partialSum, a) => {
-        return partialSum + a[1];
-      }, 0) / colorSet.length;
-      const totalL = colorSet.reduce((partialSum, a) => partialSum + a[2], 0) / colorSet.length;
-      const totalA = colorSet.reduce((partialSum, a) => partialSum + a[3], 0) / colorSet.length;
-      const newColor = `${colorkey.split(',')[0]}, ${totalS}%, ${totalL}%, ${totalA}`;
 
-      this.globalColors.push(newColor);
-    }
-    this.kMeansColor.emit(this.globalColors);
+    this.thread.postMessage({
+      method: "analyzeImageData",
+      hslArray: hslArray,
+      setupAlgo: {
+        centroidNumber: this.centroidNumber,
+        loop_limit: this.loop_limit
+      }
+    });
   }
 
   private fromImageDataToColorArray(clampedArray: Uint8ClampedArray, translationFunction: Function): Array<number[]> {

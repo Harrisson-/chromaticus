@@ -11,6 +11,8 @@ export class AppComponent {
   globalColors: Array<string> = [];
   fileToUpload: any;
   disablePanel: boolean = true;
+  loaderText: string = '';
+  showLoader: boolean = false;
 
   constructor() {}
   
@@ -27,5 +29,10 @@ export class AppComponent {
     const target = event.target as HTMLInputElement;
     const files = target.files as FileList;
     this.fileToUpload =  URL.createObjectURL(files[0]);
+  }
+
+  getLoaderState(value: boolean) {
+    console.log('update loader state', value);
+    this.showLoader = value;
   }
 }
